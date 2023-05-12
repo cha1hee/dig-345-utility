@@ -1,0 +1,24 @@
+{
+	"name": "Time and Place",
+	"description": "There's a time and place for everything, including productivity and having fun. This extension will help users manage their time, and reduce distractions from the web. ",
+	"version": "1.1.0",
+	"manifest_version": 3,
+
+    "options_page": "pages/options.html",
+
+    "action": {
+        "default_title": "ToolsSS",
+        "default_popup": "pages/popup.html"
+    },
+
+    "permissions": ["tabs", "contextMenus", "storage"],
+
+    "background": {
+        "service_worker": "js/background.js"
+    },
+
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["js/content.js"]
+    }]
+}

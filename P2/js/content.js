@@ -17,12 +17,9 @@ chrome.runtime.sendMessage({ info: "pls send info" }, function (response) {
 });
 
 setInterval(function () {
-  console.log("in next");
-
   // if on page and the page isn't undefined
   if (document.hasFocus() && typeof window.location.href !== "undefined") {
     checkDomain();
-    basicPopup();
     //get storage info first and send current state
     chrome.runtime.sendMessage({ domain: currDomain }, function (response) {
       storage = response.storing;
@@ -40,6 +37,7 @@ setInterval(function () {
         limit = response.storing[currDomain];
         if (timer / 60 > limit) {
           if (modes[currDomain] == "gentle") {
+            gentlePopup();
           }
           if (modes[currDomain] == "danger") {
             var ofs = 0;
@@ -82,10 +80,10 @@ function makeRec() {
   document.body.appendChild(canvas); //Append canvas to body element
 }
 //create new popup
-function basicPopup() {
-  // popupWindow = window.open(
-  //   "alertpop.html",
-  //   "popUpWindow",
-  //   "height=500,width=500,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes"
-  // );
+function gentlePopup() {
+  popupWindow = window.open(
+    "https://cha1hee.github.io/DIG345UtilityExtensionPopup/",
+    "popUpWindow",
+    "height=500,width=500,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes"
+  );
 }

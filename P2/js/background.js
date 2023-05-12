@@ -28,13 +28,16 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   //  request from popup onload for storage
   if (request.get) {
-    sendResponse({ storing: storage, domain: currDomain });
+    sendResponse({ storing: storage, domain: currDomain, modeStored: modes });
   }
   // when the time limit is changed update in storage
   if (request.click) {
     if (request.click > -1) {
       storage[currDomain] = request.click;
-      modes[currDomain] = "gentle";
+      console.log("logging click");
+      // if (typeof modes[currDomain] == "undefined") {
+      //   modes[currDomain] = "gentle";
+      // }
     } else {
       delete storage[currDomain];
       delete modes[currDomain];
@@ -56,6 +59,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   // if mode is changed change in storage
   if (request.change) {
+    console.log("logging change");
     modes[currDomain] = request.change;
   }
 });

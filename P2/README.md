@@ -1,48 +1,74 @@
-Work Hard Play Hard — Extension (Manifest V3)
+# Work Hard Play Hard — Chrome Extension (Manifest V3)
 
-This repository contains a Chrome/Chromium extension that helps users manage time and reduce web distractions. It uses a background service worker, a content script injected into pages, and a popup UI.
+This repository contains a Chrome/Chromium extension designed to help users manage their time and reduce web distractions. It leverages a background service worker, a content script injected into web pages, and a popup user interface.
 
-Quick status
-- Manifest: `manifest.json` (Manifest V3)
-- Background: `js/background.js` (service worker) — now persists settings in `chrome.storage.local`
-- Content script: `js/content.js` (injected into pages)
-- Popup: `pages/popup.html` + `pages/popup.js`
+## Quick Overview
 
-How to load locally (Chrome / Edge / Brave)
-1. Open Chrome and navigate to chrome://extensions/.
-2. Enable "Developer mode" (top-right).
-3. Click "Load unpacked" and select this project folder (the folder that contains `manifest.json`).
-4. The extension should appear as "Work Hard Play Hard" and be active.
+**Manifest**: `manifest.json` (Manifest V3)
 
-Quick test (smoke test)
-1. Load the extension as above.
+**Background**: `js/background.js` (service worker) — persists settings in `chrome.storage.local`
+
+**Content Script**: `js/content.js` (injected into pages)
+
+**Popup UI**: `pages/popup.html` + `pages/popup.js`
+
+## How to Load Locally (Chrome / Edge / Brave)
+
+1. Open your browser and navigate to `chrome://extensions/.`
+
+2. Enable **Developer mode** (toggle in the top-right corner).
+
+3. Click **Load unpacked** and select this project folder (the folder containing `manifest.json`).
+
+4. The extension should appear as **Work Hard Play Hard** and be active.
+
+## Quick Test (Smoke Test)
+
+1. Load the extension as described above.
+
 2. Open any website (e.g., https://example.com).
-3. Click the extension icon to open the popup. Change "Session Time Limit" and "Mode".
-4. Open DevTools for the page (Cmd+Option+I) and the extension service worker (via chrome://extensions/ -> "Service worker (Inspect)").
-5. In the service worker console run:
 
-```
-chrome.storage.local.get(null, console.log);
-```
+3. Click the extension icon to open the popup. Change the **Session Time Limit** and **Mode** settings.
 
-This prints persisted `storage`, `modes`, `timers`, and `today` keys.
+4. Open DevTools on the webpage (Cmd+Option+I or Ctrl+Shift+I) and open the extension's service worker console via `chrome://extensions/` → click **Service worker (Inspect)** under the extension.
 
-Notes about persistence
-- The background now persists three keys in `chrome.storage.local`: `storage` (time limits per domain), `modes` (mode per domain), and `timers` (accumulated seconds per domain), plus `today` (day-of-month to reset daily timers).
-- The popup and content script still communicate via messages to the background. Persistence means settings survive service worker unloads and browser restarts.
+5. In the service worker console, run:
 
-Debugging tips
-- Reload extension: chrome://extensions/ -> Click "Reload" for this extension after editing files.
-- Inspect popup: open the popup and right-click -> Inspect.
-- Inspect background/service worker: chrome://extensions/ -> find the extension -> click "service worker" under "Inspect views".
-- Inspect content script: open DevTools for any page where the content script runs.
+<pre>```js chrome.storage.local.get(null, console.log);```</pre>
 
-Development notes
-- The extension currently uses message passing; to reduce messages you could read/write `chrome.storage` directly from the popup and content scripts.
-- The extension uses `window.open` in the content script for the "gentle" mode reminder. Popup blockers or cross-origin policies may affect behavior.
+This will output the persisted keys: `storage`, `modes`, `timers`, and `today`.
 
-Next improvements (suggested)
-- Move popup and content script to use `chrome.storage` directly for reads/writes.
-- Add unit tests or a small harness to simulate timers for easier development.
+## Notes About Persistence
 
-If you'd like, I can update `pages/popup.js` and `js/content.js` to read/write `chrome.storage` directly (I'll make that change and run quick smoke checks).
+- The background service worker persists the following keys in `chrome.storage.local`:
+
+  - `storage` — time limits per domain
+  - `modes` — mode settings per domain
+  - `timers` — accumulated seconds per domain
+  - `today` — day of the month to reset daily timers
+
+The popup and content script communicate with the background service worker via messages. Persistence ensures settings survive service worker unloads and browser restarts.
+
+## Debugging Tips
+
+- **Reload extension:** `Go to chrome://extensions/` → click **Reload** for this extension after editing files.
+
+- **Inspect popup:** Open the popup, then right-click → **Inspect**.
+
+- **Inspect background/service worker:** Go to `chrome://extensions/` → find the extension → click **service worker** under **Inspect views**.
+
+- **Inspect content script:** Open DevTools on any page where the content script is injected.
+
+## Development Notes
+
+- Currently, the extension uses message passing between components. The popup and content scripts use sendMessage and sendResponse to communicate with the background service worker, demonstrating clear message passing logic.
+
+- While directly accessing `chrome.storage` from popup and content scripts could simplify the code and reduce message traffic, this approach highlights inter-component messaging and coordination.
+
+- The content script uses `window.open` to show a "gentle" mode reminder. Popup blockers or cross-origin restrictions may affect this behavior.
+
+## Suggested Next Improvements
+
+- Refactor popup and content scripts to directly access `chrome.storage` for reads and writes, reducing message passing.
+
+- Add unit tests or a test harness to simulate timers for easier development and debugging.

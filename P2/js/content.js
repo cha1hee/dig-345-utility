@@ -84,6 +84,6 @@ function gentlePopup() {
   popupWindow = window.open(
     "https://cha1hee.github.io/DIG345UtilityExtensionPopup/",
     "popUpWindow",
-    "height=500,width=500,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes"
+    "height=300,width=900,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes"
   );
 }
